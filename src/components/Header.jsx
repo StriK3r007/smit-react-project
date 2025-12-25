@@ -14,7 +14,7 @@ export default function Header() {
     ];
 
     return (
-        <header className="bg-base-100 shadow-sm">
+        <header className="bg-base-100 shadow-sm px-4">
             <div className="navbar container mx-auto">
                 {/* START: Logo & Mobile Menu */}
                 <div className="navbar-start">
