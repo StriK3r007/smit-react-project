@@ -1,8 +1,52 @@
-import { Link } from 'react-router'
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router'
 import InputButton from '../components/InputButton'
 import TextField from '../components/TextField'
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../config/firebaseconfig";
 
 export default function SignUp() {
+    const [error, setError] = useState('');
+    const [userData, setUserData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+    })
+    const navigate= useNavigate()
+
+    const handleChange = (event) => {
+        const { name, value } = event.target
+        // setUserData({ ...userData, [name]: value})
+        setUserData(prevState => ({ ...prevState, [name]: value }));
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        if (userData.password !== userData.confirmPassword) {
+            setError("Passwords don't match!");
+            return;
+        }
+
+        createUserWithEmailAndPassword(auth, userData.email, userData.password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log(user);
+
+                alert("Account Created Successfully!");
+                navigate('/sign-in');
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                alert(`Error: ${errorMessage} (Code: ${errorCode})`);
+            });
+
+        setError('');
+    };
+
     return (
         <section className="min-h-screen flex items-center justify-center">
             <div
@@ -16,31 +60,35 @@ export default function SignUp() {
                     </p>
                 </div>
 
-                <form className="space-y-5" id="form">
+                <form className="space-y-5" onSubmit={handleSubmit}>
                     <div className='flex gap-2'>
                         {/* first name */}
                         <TextField
                             id='first-name'
-                            name='first-name'
+                            name='firstName'
                             type='text'
                             required
                             autoComplete='first-name'
                             placeholder='John'
                             className=''
                             label='First Name'
-                            error=''
+                            error={error && !userData.firstName ? "First name is required" : ''}
+                            value={userData.firstName}
+                            onChange={handleChange}
                         />
                         {/* last name */}
                         <TextField
                             id='last-name'
-                            name='last-name'
+                            name='lastName'
                             type='text'
                             required
                             autoComplete='last-name'
                             placeholder='Doe'
                             className=''
                             label='Last Name'
-                            error=''
+                            error={error && !userData.lastName ? "Last name is required" : ''}
+                            value={userData.lastName}
+                            onChange={handleChange}
                         />
                     </div>
                     {/* email */}
@@ -49,11 +97,13 @@ export default function SignUp() {
                         name='email'
                         type='email'
                         required
-                        autocomplete='email'
+                        autoComplete='email'
                         placeholder='johndoe@example.com'
                         className=''
                         label='Email Address'
-                        error=''
+                        error={error && !userData.email ? "Email is required" : ''}
+                        value={userData.email}
+                        onChange={handleChange}
                     // icon={<HiOutlineMail className="h-5 w-5 text-gray-400" />}
                     />
                     {/* password */}
@@ -62,21 +112,27 @@ export default function SignUp() {
                         name='password'
                         type='password'
                         required
-                        autocomplete='current-password'
+                        autoComplete='current-password'
                         placeholder='••••••••'
                         className=''
                         label='Password'
+                        error={error && !userData.password ? "Password is required" : ''}
+                        value={userData.password}
+                        onChange={handleChange}
                     />
                     {/* confirm-password */}
                     <TextField
                         id='confirm-password'
-                        name='confirm-password'
+                        name='confirmPassword'
                         type='password'
                         required
-                        autocomplete='current-password'
+                        autoComplete='current-password'
                         placeholder='••••••••'
                         className=''
                         label='Confirm Password'
+                        error={error}
+                        value={userData.confirmPassword}
+                        onChange={handleChange}
                     />
 
                     <div className="flex items-center justify-between">

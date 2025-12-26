@@ -1,3 +1,4 @@
+// import PropTypes from 'prop-types';
 export default function TextField({
     type = 'text',
     placeholder = 'Input field',
@@ -9,6 +10,7 @@ export default function TextField({
     autoComplete = '',
     className = '',
     error = '',
+    ...rest
 }) {
     return (
         <div className="relative">
@@ -36,9 +38,22 @@ export default function TextField({
                     placeholder={placeholder}
                     className={`appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ${icon ? 'pl-10' : ''} ${error ? 'border-red-500' : ''} ${className}
                     `}
+                    {...rest}
                 />
             </div>
             {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
         </div>
     )
 }
+// TextField.propTypes = {
+//     type: PropTypes.string,
+//     placeholder: PropTypes.string,
+//     required: PropTypes.bool,
+//     label: PropTypes.string,
+//     icon: PropTypes.node,
+//     id: PropTypes.string,
+//     name: PropTypes.string,
+//     autoComplete: PropTypes.string,
+//     className: PropTypes.string,
+//     error: PropTypes.string,
+// };

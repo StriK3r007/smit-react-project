@@ -22,7 +22,7 @@ export default function SignIn() {
                         name='email'
                         type='email'
                         required
-                        autocomplete='email'
+                        autoComplete='email'
                         placeholder='you@example.com'
                         className=''
                         label='Email Address'
@@ -34,7 +34,7 @@ export default function SignIn() {
                         name='password'
                         type='password'
                         required
-                        autocomplete='current-password'
+                        autoComplete='current-password'
                         placeholder='••••••••'
                         className=''
                         label='Password'
