@@ -35,13 +35,20 @@ export default function SignIn() {
                         type='password'
                         required
                         autocomplete='current-password'
-                        placeholder='Enter your password'
+                        placeholder='••••••••'
                         className=''
                         label='Password'
                     />
+
+                    <div className="flex items-center justify-between">
+                        <div className="text-sm">
+                            <Link to="/sign-up" className="font-medium text-indigo-600 hover:text-indigo-500">Forgot your password?</Link>
+                        </div>
+                    </div>
+
                     <InputButton
                         type='submit'
-                        className=''
+                        className='w-full flex justify-center bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                     />
                 </form>
 
