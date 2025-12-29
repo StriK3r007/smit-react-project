@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router'
 import InputButton from '../components/InputButton'
 import TextField from '../components/TextField'
+
+// firbase / firestore
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../config/firebaseconfig";
+import { Timestamp, doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../config/firebaseconfig";
 
 export default function SignUp() {
     const [error, setError] = useState('');
@@ -14,7 +17,7 @@ export default function SignUp() {
         password: '',
         confirmPassword: '',
     })
-    const navigate= useNavigate()
+    const navigate = useNavigate()
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -25,23 +28,54 @@ export default function SignUp() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
+        if(!userData.firstName.trim() || !userData.lastName.trim() || !userData.email.trim() || !userData.password.trim() || !userData.confirmPassword.trim()) {
+            alert("All fields are required!")
+            return
+        }
+
         if (userData.password !== userData.confirmPassword) {
             setError("Passwords don't match!");
             return;
         }
 
         createUserWithEmailAndPassword(auth, userData.email, userData.password)
-            .then((userCredential) => {
+            .then(async (userCredential) => {
                 const user = userCredential.user;
                 console.log(user);
 
-                alert("Account Created Successfully!");
-                navigate('/sign-in');
+                try {
+                    const userDbData = {
+                        uid: user.uid,
+                        firstName: userData.firstName,
+                        lastName: userData.lastName,
+                        email: userData.email,
+                        profile: '',
+                        role: "user",
+                        createdAt: Timestamp.fromDate(new Date()),
+                        updatedAt: Timestamp.fromDate(new Date())
+                    }
+
+                    // ! this code generates a random id and uses it for document
+                    // const docRef = await addDoc(collection(db, "users"), userDbData);
+
+                    // ! while this code uses user id for document
+                    // FIX: Use setDoc with doc() to specify the ID manually
+                    // Syntax: setDoc(doc(database, collection, documentID), data)
+                    await setDoc(doc(db, "users", user.uid), userDbData);
+
+                    console.log("Document written with ID matching UID: ", user.uid);
+                    alert("Account Created Successfully!");
+                    navigate('/sign-in');
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                }
+
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 alert(`Error: ${errorMessage} (Code: ${errorCode})`);
+                console.error(`Error: ${errorMessage} (Code: ${errorCode})`);
             });
 
         setError('');

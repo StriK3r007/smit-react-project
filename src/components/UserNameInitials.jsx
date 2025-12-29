@@ -1,7 +1,8 @@
 // import { useState, useEffect } from "react";
 
-// export default function UserNameInitials() {
-//     const [userName, setUserName] = useState('Zubair Ahmed');
+// export default function UserNameInitials({firstName, lastName}) {
+//     const userName = `${firstName} ${lastName}`;
+//     // const [userName, setUserName] = useState('Zubair Ahmed');
 //     const [userNameInitials, setUserNameInitials] = useState('');
 
 //     useEffect(() => {
@@ -21,9 +22,13 @@
 // }
 
 
-export default function UserNameInitials({name}) {
+export default function UserNameInitials({firstName, lastName}) {
     // const [userName, setUserName] = useState(name);
-    const userName = name;
+    const userName = `${firstName || ''} ${lastName || ''}`.trim();
+
+    if(!userName) {
+        return <div className="skeleton h-16 w-16 shrink-0 rounded-full"></div>
+    }
     
     // Calculate initials directly in the render logic
     const userNameInitials = userName

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { AiOutlineLogout } from "react-icons/ai";
 import UserNameInitials from "./UserNameInitials";
 
-export default function DrawerSidebar() {
+export default function DrawerSidebar({firstName, lastName}) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [avatar, isAvatar] = useState(false)
     const navigate = useNavigate()
@@ -68,7 +68,7 @@ export default function DrawerSidebar() {
                                         avatar && avatar ? (
                                             <img alt="User profile" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
                                         ) : (
-                                            <UserNameInitials name='Zubair Ahmed' />
+                                            <UserNameInitials firstName={firstName} lastName={lastName} />
                                         )
                                     }
                                 </div>
