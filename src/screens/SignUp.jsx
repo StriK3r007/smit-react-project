@@ -7,6 +7,7 @@ import TextField from '../components/TextField'
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Timestamp, doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../config/firebaseconfig";
+import toast from 'react-hot-toast';
 
 export default function SignUp() {
     const [error, setError] = useState('');
@@ -29,12 +30,12 @@ export default function SignUp() {
         event.preventDefault();
 
         if(!userData.firstName.trim() || !userData.lastName.trim() || !userData.email.trim() || !userData.password.trim() || !userData.confirmPassword.trim()) {
-            alert("All fields are required!")
+            toast.error("All fields are required!")
             return
         }
 
         if (userData.password !== userData.confirmPassword) {
-            setError("Passwords don't match!");
+            toast.error("Passwords don't match!");
             return;
         }
 
@@ -64,9 +65,10 @@ export default function SignUp() {
                     await setDoc(doc(db, "users", user.uid), userDbData);
 
                     console.log("Document written with ID matching UID: ", user.uid);
-                    alert("Account Created Successfully!");
+                    toast.success("Account Created Successfully!");
                     navigate('/sign-in');
                 } catch (error) {
+                    toast.error('Error adding document');
                     console.error("Error adding document: ", error);
                 }
 
@@ -74,7 +76,8 @@ export default function SignUp() {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                alert(`Error: ${errorMessage} (Code: ${errorCode})`);
+                // alert(`Error: ${errorMessage} (Code: ${errorCode})`);
+                toast.error(`Error: ${errorMessage} (Code: ${errorCode})`);
                 console.error(`Error: ${errorMessage} (Code: ${errorCode})`);
             });
 

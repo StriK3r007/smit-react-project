@@ -5,6 +5,7 @@ import TextField from '../components/TextField'
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebaseconfig";
 import { useState } from 'react';
+import toast, { ToastBar } from 'react-hot-toast';
 
 export default function SignIn() {
     const [error, setError] = useState('');
@@ -26,6 +27,7 @@ export default function SignIn() {
     
             if (!userData.email.trim() || !userData.password.trim()) {
                 setError("Please enter your email and password");
+                toast.error("Please enter your email and password");
                 return;
             }
             console.log(userData)
@@ -34,9 +36,7 @@ export default function SignIn() {
                 .then((userCredential) => {
                     // Signed in
                     const user = userCredential.user;
-                    console.log(user);
-    
-                    alert("Signin Successfully!");
+                    toast.success("Signin Successfully!");
                     navigate('/');
                 })
                 .catch((error) => {

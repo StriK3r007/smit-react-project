@@ -15,6 +15,7 @@ import SignUp from "./screens/SignUp";
 import { auth, db } from "./config/firebaseconfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { getDoc, doc} from "firebase/firestore";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function App() {
   const [firstName, setFirstName] = useState('');
@@ -46,6 +47,7 @@ export default function App() {
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
+          toast.error('Error fetching user data')
         }
       } else {
           setUser(null);  // User is logged out
@@ -67,6 +69,7 @@ export default function App() {
   return (
     <>
       <BrowserRouter>
+      <Toaster position="top-center" reverseOrder={false}/>
         {/* <Header/> */}
         <Routes>
           {/* Public Routes */}
