@@ -1,9 +1,15 @@
-import { useState } from "react";
-import { Link, useLocation } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ThemeController from './ThemeController'
+import UserNameInitials from "./UserNameInitials";
+
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../config/firebaseconfig";
 
 export default function Header() {
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [avatar, isAvatar] = useState(false)
+    const navigate = useNavigate()
 
     // Get the current path to dynamically apply 'active' styles
     const location = useLocation();
@@ -12,6 +18,25 @@ export default function Header() {
     const navLinks = [
         { id: 1, name: 'Home', path: '/' },
     ];
+
+    useEffect(() => {
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                console.log("Navbar User is logged in:", user.uid);
+                setIsLoggedIn(true)
+            } else {
+                console.log("No user is logged in.");
+            }
+        })
+    }, [])
+
+    const logoutUser = () => {
+        signOut(auth).then(() => {
+            navigate('/sign-in');
+        }).catch((error) => {
+            alert(`Error: ${error.message} (Code: ${error.code})`);
+        });
+    }
 
     return (
         <header className="bg-base-100 shadow-sm px-4">
@@ -72,14 +97,27 @@ export default function Header() {
                     {isLoggedIn ? (
                         <div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                                <div className="w-10 rounded-full">
-                                    <img alt="User profile" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                <div className="w-10 rounded-full bg-red-400 flex items-center justify-center">
+                                {
+                                    avatar && avatar ? (
+                                        <img alt="User profile" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                    ) : (
+                                        <UserNameInitials name='Zubair Ahmed'/>
+                                    )
+                                }
                                 </div>
                             </div>
                             <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                                <li><Link to="/profile" className="justify-between">Profile <span className="badge">New</span></Link></li>
+                                <li><Link to="/dashboard" className="justify-between">Dashboard <span className="badge">New</span></Link></li>
                                 <li><a>Settings</a></li>
-                                <li><button onClick={() => setIsLoggedIn(false)}>Logout</button></li>
+                                {/* <li><button onClick={() => setIsLoggedIn(false)}>Logout</button></li> */}
+                                {isLoggedIn ? (
+                                    <li><button onClick={logoutUser}>Logout</button></li>
+                                ) : (
+                                    <span></span>
+                                )
+                                
+                                }
                             </ul>
                         </div>
                     ) : (
