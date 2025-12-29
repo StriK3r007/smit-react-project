@@ -1,11 +1,42 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { sidebarMenu } from "../config/sidebarMenu";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../config/firebaseconfig";
+import { useEffect, useState } from "react";
+import { AiOutlineLogout } from "react-icons/ai";
+import UserNameInitials from "./UserNameInitials";
 
 export default function DrawerSidebar() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [avatar, isAvatar] = useState(false)
+    const navigate = useNavigate()
+
+    const location = useLocation();
+
     const closeDrawer = () => {
         const drawer = document.getElementById("my-drawer-4");
         if (drawer) drawer.checked = false;
     };
+
+    useEffect(() => {
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                console.log("Navbar User is logged in:", user.uid);
+                setIsLoggedIn(true)
+            } else {
+                console.log("No user is logged in.");
+                navigate('/sign-in')
+            }
+        })
+    }, [])
+
+    const logoutUser = () => {
+        signOut(auth).then(() => {
+            navigate('/sign-in');
+        }).catch((error) => {
+            alert(`Error: ${error.message} (Code: ${error.code})`);
+        });
+    }
 
     return (
         <>
@@ -30,13 +61,19 @@ export default function DrawerSidebar() {
                     <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label>
                     <div className="flex justify-center items-center bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64 pt-4">
                         {/* Profile Dropdown or Login Button */}
-                            <div>
-                                <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                                    <div className="w-10 rounded-full">
-                                        <img alt="User profile" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                                    </div>
+                        <div>
+                            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                                <div className="w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                    {
+                                        avatar && avatar ? (
+                                            <img alt="User profile" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                        ) : (
+                                            <UserNameInitials name='Zubair Ahmed' />
+                                        )
+                                    }
                                 </div>
                             </div>
+                        </div>
                     </div>
                     <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
                         {/* Sidebar content here */}
@@ -49,7 +86,12 @@ export default function DrawerSidebar() {
                                             to={item.path}
                                             onClick={closeDrawer}
                                             data-tip={item.label}
-                                            className={`is-drawer-close:tooltip is-drawer-close:tooltip-right`}
+                                            className={`is-drawer-close:tooltip is-drawer-close:tooltip-right
+                                                ${location.pathname === item.path
+                                                    ? 'text-amber-400' // Active style
+                                                    : 'text-gray-500 hover:text-gray-400' // Inactive style
+                                                }
+                                            `}
                                         >
                                             {item.icon}
                                             <span className="is-drawer-close:hidden">{item.label}</span>
@@ -57,7 +99,14 @@ export default function DrawerSidebar() {
                                     </li>
                                 ))
                             }
-
+                            <li
+                                data-tip='Logout'
+                                className={`is-drawer-close:tooltip is-drawer-close:tooltip-right`}
+                                onClick={logoutUser}
+                            >
+                                {<AiOutlineLogout />}
+                                <span className="is-drawer-close:hidden" onClick={logoutUser}>Logout</span>
+                            </li>
                         </ul>
                     </div>
                 </div>

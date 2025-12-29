@@ -3,7 +3,7 @@ import { FiHome, FiSettings } from "react-icons/fi";
 
 export const sidebarMenu = [
     {
-        label: "Homepage",
+        label: "Dashboard",
         path: "/dashboard",
         icon: <FiHome />,
     },
@@ -17,9 +17,9 @@ export const sidebarMenu = [
         path: "/dashboard/settings",
         icon: <FiSettings />,
     },
-    {
-        label: "Logout",
-        path: "/user-auth",
-        icon: <AiOutlineLogout />,
-    },
+    // {
+    //     label: "Logout",
+    //     path: "/user-auth",
+    //     icon: <AiOutlineLogout />,
+    // },
 ];
