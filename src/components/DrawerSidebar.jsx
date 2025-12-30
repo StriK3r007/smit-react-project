@@ -93,21 +93,23 @@ export default function DrawerSidebar({firstName, lastName}) {
                                                 }
                                             `}
                                         >
+                                            <span>
                                             {item.icon}
+                                            </span>
                                             <span className="is-drawer-close:hidden">{item.label}</span>
                                         </NavLink>
                                     </li>
                                 ))
                             }
                             <li>
-                                <span className="is-drawer-close:hidden" onClick={logoutUser}>Logout</span>
-
                                 <NavLink
                                             onClick={logoutUser}
                                             data-tip='Logout'
                                             className={'is-drawer-close:tooltip is-drawer-close:tooltip-right'}
                                         >
-                                        {<AiOutlineLogout />}
+                                        <span className="text-red-600">
+                                            {<AiOutlineLogout/>}
+                                        </span>
                                             <span className="is-drawer-close:hidden" onClick={logoutUser}>Logout</span>
                                         </NavLink>
                             </li>

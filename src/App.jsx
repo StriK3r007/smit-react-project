@@ -16,6 +16,7 @@ import { auth, db } from "./config/firebaseconfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { getDoc, doc} from "firebase/firestore";
 import toast, { Toaster } from "react-hot-toast";
+import Footer from "./components/Footer";
 
 export default function App() {
   const [firstName, setFirstName] = useState('');
@@ -92,6 +93,7 @@ export default function App() {
             <Route path="*" element={<Home />} />
           )}
         </Routes>
+        <Footer/>
       </BrowserRouter>
     </>
   )
