@@ -5,7 +5,7 @@ import TextField from '../components/TextField'
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebaseconfig";
 import { useState } from 'react';
-import toast, { ToastBar } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 export default function SignIn() {
     const [error, setError] = useState('');
