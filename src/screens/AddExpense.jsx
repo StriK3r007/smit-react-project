@@ -1,16 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextField from "../components/TextField";
 import InputButton from "../components/InputButton";
 import toast from "react-hot-toast";
 
-export default function AddExpense() {
+export default function AddExpense({ onAddExpense }) {
     const [error, setError] = useState('');
+    const [expenseArr, setExpenseArr] = useState([])
+    // Get Current Date
+    const getTodayDate = () => {
+        return new Date().toISOString().split('T')[0];
+    };
+
     const [expenseData, setExpenseData] = useState({
         name: '',
         amount: '',
         category: '',
-        date: '',
+        date: getTodayDate(),
     })
+
+    
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -30,23 +38,34 @@ export default function AddExpense() {
             toast.error("Amount must be greater than zero")
             return
         }
+
         console.log(expenseData)
+        // setExpenseArr(prevExpenses => [...prevExpenses, expenseData]);
+        setExpenseArr(prev => [...prev, { ...expenseData }]);
+
+        // localStorage.setItem("expenses", JSON.stringify(expenseArr))
+
+        onAddExpense({ ...expenseData });
+
+        console.log('Expense Arr', expenseArr)
         toast.success("Expense added successfully!");
 
         setExpenseData({
             name: '',
             amount: '',
             category: '',
-            date: '',
+            date: getTodayDate(),
         });
-
-
-
+    
         setError('');
 
         document.getElementById('my_modal_3').close();
 
     };
+    useEffect(() => {
+        localStorage.setItem("expenses", JSON.stringify(expenseArr));
+    }, [expenseArr]);
+
 
     return (
         <section className="w-full flex items-center justify-center">
