@@ -13,29 +13,41 @@ export default function AddExpense() {
     })
 
     const handleChange = (event) => {
-        const {name, value} = event.target
+        const { name, value } = event.target
         setExpenseData(prevState => ({ ...prevState, [name]: value }));
         console.log(expenseData)
     }
 
     const handleSubmit = (event) => {
-            event.preventDefault();
-    
-            if (!expenseData.name.trim() || !expenseData.amount.trim() || !expenseData.category.trim() || !expenseData.date.trim()) {
-                setError("All fields are required");
-                toast.error(error);
-                return;
-            }
-            if(expenseData.amount.trim() <= 0) {
-                toast.error("Amount must be greater than zero")
-                return
-            }
-            console.log(expenseData)
-            toast.success("Expense added successfully!");
-    
-            setError('');
-        };
-    
+        event.preventDefault();
+
+        if (!expenseData.name.trim() || !expenseData.amount.trim() || !expenseData.category.trim() || !expenseData.date.trim()) {
+            setError("All fields are required");
+            toast.error("All fields are required");
+            return;
+        }
+        if (expenseData.amount <= 0) {
+            toast.error("Amount must be greater than zero")
+            return
+        }
+        console.log(expenseData)
+        toast.success("Expense added successfully!");
+
+        setExpenseData({
+            name: '',
+            amount: '',
+            category: '',
+            date: '',
+        });
+
+
+
+        setError('');
+
+        document.getElementById('my_modal_3').close();
+
+    };
+
     return (
         <section className="w-full flex items-center justify-center">
             <div className="bg-white w-full sm:w-[168] px-7 py-10">
@@ -56,7 +68,7 @@ export default function AddExpense() {
                             label='Name'
                             error={error && !expenseData.name ? "Name is required" : ''}
                             value={expenseData.name}
-                        onChange={handleChange}
+                            onChange={handleChange}
                         />
                         <TextField
                             id='amount'
@@ -69,7 +81,7 @@ export default function AddExpense() {
                             label='Amount'
                             error={error && !expenseData.amount ? "Amount is required" : ''}
                             value={expenseData.amount}
-                        onChange={handleChange}
+                            onChange={handleChange}
                         />
                         <TextField
                             id='category'
@@ -82,7 +94,7 @@ export default function AddExpense() {
                             label='Category'
                             error={error && !expenseData.category ? "Category is required" : ''}
                             value={expenseData.category}
-                        onChange={handleChange}
+                            onChange={handleChange}
                         />
                         <TextField
                             id='date'
@@ -95,7 +107,7 @@ export default function AddExpense() {
                             label='Date'
                             error={error && !expenseData.date ? "Date is required" : ''}
                             value={expenseData.date}
-                        onChange={handleChange}
+                            onChange={handleChange}
                         />
                         <InputButton
                             type='submit'

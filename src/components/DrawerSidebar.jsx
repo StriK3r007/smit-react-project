@@ -88,7 +88,7 @@ export default function DrawerSidebar({firstName, lastName}) {
                                             data-tip={item.label}
                                             className={`is-drawer-close:tooltip is-drawer-close:tooltip-right
                                                 ${location.pathname === item.path
-                                                    ? 'text-amber-400' // Active style
+                                                    ? 'text-green-500' // Active style
                                                     : 'text-gray-500 hover:text-gray-400' // Inactive style
                                                 }
                                             `}
