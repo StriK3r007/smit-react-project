@@ -180,6 +180,7 @@ export default function SignUp() {
 
                     <InputButton
                         type='submit'
+                        value='Sign up'
                         className='w-full flex justify-center bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500'
                     />
                 </form>

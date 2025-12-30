@@ -1,11 +1,15 @@
 import Modal from "../components/Modal"
+import AddExpense from "./AddExpense"
+
 
 export default function Expenses() {
     return (
         <>
-            <h1 className="text-xl font-bold">Expenses Screen</h1>;
             <section>
-                <Modal/>
+                <div className="flex justify-between items-center">
+                <h1 className="text-2xl font-bold">Expenses</h1>;
+                <Modal name={'Add Expense'} children={<AddExpense />} />
+                </div>
             </section>
         </>
     )

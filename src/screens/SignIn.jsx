@@ -37,7 +37,7 @@ export default function SignIn() {
                     // Signed in
                     const user = userCredential.user;
                     toast.success("Signin Successfully!");
-                    navigate('/');
+                    navigate('/dashboard');
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -98,6 +98,7 @@ export default function SignIn() {
 
                     <InputButton
                         type='submit'
+                        value='Sign in'
                         className='w-full flex justify-center bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                     />
                 </form>
