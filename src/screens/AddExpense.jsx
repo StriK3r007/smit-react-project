@@ -18,7 +18,19 @@ export default function AddExpense({ onAddExpense }) {
         date: getTodayDate(),
     })
 
-    
+    const categories = [
+        "Food",
+        "Petrol",
+        "Haircut",
+        "Loan",
+        "Health",
+        "Travel",
+        "Utilites",
+        "Shopping",
+        "Transportation",
+        "Entertainment",
+        "Other Expenses",
+    ];
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -56,7 +68,7 @@ export default function AddExpense({ onAddExpense }) {
             category: '',
             date: getTodayDate(),
         });
-    
+
         setError('');
 
         document.getElementById('my_modal_3').close();
@@ -102,7 +114,7 @@ export default function AddExpense({ onAddExpense }) {
                             value={expenseData.amount}
                             onChange={handleChange}
                         />
-                        <TextField
+                        {/* <TextField
                             id='category'
                             name='category'
                             type='text'
@@ -114,7 +126,31 @@ export default function AddExpense({ onAddExpense }) {
                             error={error && !expenseData.category ? "Category is required" : ''}
                             value={expenseData.category}
                             onChange={handleChange}
-                        />
+                        /> */}
+                        <div className="flex flex-col gap-2">
+                            <label
+                                htmlFor="category"
+                                className="block text-sm font-medium text-gray-700"
+                            >
+                            Category
+                            </label>
+                            <select
+                                id="category"
+                                name="category"
+                                required
+                                value={expenseData.category}
+                                onChange={handleChange}
+                                error={error && !expenseData.category ? "Category is required" : ''}
+                                className="p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <option value="" disabled>Select a category</option>
+                                {
+                                    categories.map((category, index) => (
+                                        <option key={index} value={category}>{category}</option>
+                                    ))
+                                }
+                            </select>
+                        </div>
                         <TextField
                             id='date'
                             name='date'
